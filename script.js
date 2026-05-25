@@ -3,9 +3,9 @@
 // Jagat Infrastructure & Algorithm
 // ============================================================
 
-// ⚠️ Deploy করার পরে এখানে আপনার Deployment ID বসান
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyOnxQqelRC93Xmx61AHsmX3XsB6u3qKK_LtY0miKigHQGwH2fz75Ho1hxy8YoYYsYWQQ/exec';
-  'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+// ✅ GAS WEB APP URL
+const WEB_APP_URL =
+  'https://script.google.com/macros/s/AKfycbyOnxQqelRC93Xmx61AHsmX3XsB6u3qKK_LtY0miKigHQGwH2fz75Ho1hxy8YoYYsYWQQ/exec';
 
 let allStudents = [];
 
@@ -108,7 +108,7 @@ const subjects = [
 ];
 
 // ============================================================
-// LOAD DATA  —  try/catch দিয়ে error handle করা হয়েছে
+// LOAD DATA
 // ============================================================
 
 window.onload = async () => {
@@ -121,7 +121,14 @@ window.onload = async () => {
 
   try {
 
-    const response = await fetch(WEB_APP_URL);
+    // ✅ Cache bypass
+    const response = await fetch(
+      WEB_APP_URL + '?t=' + Date.now(),
+      {
+        method: 'GET',
+        cache: 'no-store'
+      }
+    );
 
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -129,23 +136,36 @@ window.onload = async () => {
 
     allStudents = await response.json();
 
-    // Loader লুকানো
+    // ✅ Array check
+    if (!Array.isArray(allStudents)) {
+      throw new Error('Invalid JSON Data');
+    }
+
+    // ✅ Loader hide
     loaderWrap.classList.add('hidden');
 
-    // Dropdown ও Button চালু করা
+    // ✅ Enable controls
     classSelect.disabled = false;
     stuSelect.disabled   = false;
     viewBtn.disabled     = false;
 
+    // ✅ Load class dropdown
     loadClassDropdown();
 
   } catch (err) {
 
-    // Loader লুকানো, Error দেখানো
+    console.error('API Error:', err);
+
     loaderWrap.classList.add('hidden');
+
     errorBox.classList.remove('hidden');
 
-    console.error('API Error:', err);
+    errorBox.innerHTML = `
+      <div style="padding:15px;">
+        Failed to Load Result Data.<br>
+        Please Try Again Later.
+      </div>
+    `;
 
   }
 
@@ -159,9 +179,27 @@ function loadClassDropdown() {
 
   const classSelect = document.getElementById('classSelect');
 
-  const classes = [...new Set(allStudents.map(s => s.CLASS))];
+  // reset
+  classSelect.innerHTML =
+    '<option value="">SELECT CLASS</option>';
 
-  classes.sort();
+  // unique class list
+  const classes = [
+
+    ...new Set(
+
+      allStudents
+        .map(s => s.CLASS)
+        .filter(Boolean)
+
+    )
+
+  ];
+
+  // sort
+  classes.sort((a, b) =>
+    String(a).localeCompare(String(b))
+  );
 
   classes.forEach(cls => {
 
@@ -178,7 +216,7 @@ function loadClassDropdown() {
 }
 
 // ============================================================
-// STUDENT DROPDOWN — class পরিবর্তনে student list update
+// CLASS CHANGE → LOAD STUDENTS
 // ============================================================
 
 document
@@ -187,13 +225,24 @@ document
 
     const cls = this.value;
 
-    const studentSelect = document.getElementById('studentSelect');
+    const studentSelect =
+      document.getElementById('studentSelect');
 
-    studentSelect.innerHTML = '<option value="">STUDENTS_NAME</option>';
+    studentSelect.innerHTML =
+      '<option value="">STUDENTS NAME</option>';
 
     if (!cls) return;
 
-    const students = allStudents.filter(s => s.CLASS == cls);
+    // filter students
+    const students = allStudents.filter(
+      s => s.CLASS == cls
+    );
+
+    // sort by name
+    students.sort((a, b) =>
+      String(a.STUDENTS_NAME || '')
+        .localeCompare(String(b.STUDENTS_NAME || ''))
+    );
 
     students.forEach(student => {
 
@@ -201,7 +250,8 @@ document
 
       option.value = student.I_D;
 
-      option.textContent = student.STUDENTS_NAME;
+      option.textContent =
+        student.STUDENTS_NAME || 'Unknown';
 
       studentSelect.appendChild(option);
 
@@ -219,26 +269,37 @@ document
 
 function showResult() {
 
-  const id = document.getElementById('studentSelect').value;
+  const id =
+    document.getElementById('studentSelect').value;
 
   if (!id) {
+
     alert('অনুগ্রহ করে একজন Student বেছে নিন।');
+
     return;
+
   }
 
-  const student = allStudents.find(s => s.I_D == id);
+  const student = allStudents.find(
+    s => String(s.I_D) === String(id)
+  );
 
   if (!student) {
+
     alert('কোনো Result পাওয়া যায়নি।');
+
     return;
+
   }
 
   renderResult(student);
 
-  // Result card-এ smooth scroll
+  // smooth scroll
   document
     .getElementById('resultWrapper')
-    .scrollIntoView({ behavior: 'smooth' });
+    .scrollIntoView({
+      behavior: 'smooth'
+    });
 
 }
 
@@ -252,6 +313,10 @@ function renderResult(student) {
     .getElementById('resultWrapper')
     .classList.remove('hidden');
 
+  // ==========================================================
+  // BASIC INFO
+  // ==========================================================
+
   document.getElementById('studentName').innerText =
     student.STUDENTS_NAME || '';
 
@@ -264,7 +329,12 @@ function renderResult(student) {
   document.getElementById('rollNumber').innerText =
     student.ROLL || '';
 
-  const tbody = document.getElementById('subjectTableBody');
+  // ==========================================================
+  // SUBJECT TABLE
+  // ==========================================================
+
+  const tbody =
+    document.getElementById('subjectTableBody');
 
   tbody.innerHTML = '';
 
@@ -272,70 +342,90 @@ function renderResult(student) {
 
     const fm = Number(student[sub.fm] || 0);
 
-    if (fm > 0) {
+    // skip if subject not exists
+    if (fm <= 0) return;
 
-      const obtainedWritten = Number(student[sub.written] || 0);
+    const obtainedWritten =
+      Number(student[sub.written] || 0);
 
-      const obtainedOral = Number(student[sub.oral] || 0);
+    const obtainedOral =
+      Number(student[sub.oral] || 0);
 
-      const total = Number(student[sub.total] || 0);
+    const total =
+      Number(student[sub.total] || 0);
 
-      const percentage = Number(student[sub.percentage] || 0);
+    const percentage =
+      Number(student[sub.percentage] || 0);
 
-      const grade = student[sub.grade] || '-';
+    const grade =
+      student[sub.grade] || '-';
 
-      let fullWritten = 0;
-      let fullOral    = 0;
+    let fullWritten = 0;
+    let fullOral    = 0;
 
-      // =========================
-      // FM LOGIC
-      // =========================
+    // ========================================================
+    // FM LOGIC
+    // ========================================================
 
-      if (fm === 100) {
+    if (fm === 100) {
 
-        fullWritten = 90;
-        fullOral    = 10;
-
-      } else if (fm === 25) {
-
-        fullWritten = 0;
-        fullOral    = 25;
-
-      } else if (fm === 50) {
-
-        if (obtainedWritten <= 0) {
-
-          fullWritten = 0;
-          fullOral    = 50;
-
-        } else {
-
-          fullWritten = 45;
-          fullOral    = 5;
-
-        }
-
-      }
-
-      const row = `
-        <tr>
-          <td>${sub.name}</td>
-          <td>${fullWritten}</td>
-          <td>${fullOral}</td>
-          <td>${fm}</td>
-          <td>${obtainedWritten}</td>
-          <td>${obtainedOral}</td>
-          <td>${total}</td>
-          <td>${percentage.toFixed(2)}%</td>
-          <td>${grade}</td>
-        </tr>
-      `;
-
-      tbody.innerHTML += row;
+      fullWritten = 90;
+      fullOral    = 10;
 
     }
 
+    else if (fm === 50) {
+
+      if (obtainedWritten <= 0) {
+
+        fullWritten = 0;
+        fullOral    = 50;
+
+      } else {
+
+        fullWritten = 45;
+        fullOral    = 5;
+
+      }
+
+    }
+
+    else if (fm === 25) {
+
+      fullWritten = 0;
+      fullOral    = 25;
+
+    }
+
+    else {
+
+      // fallback
+      fullWritten = fm;
+      fullOral    = 0;
+
+    }
+
+    const row = `
+      <tr>
+        <td>${sub.name}</td>
+        <td>${fullWritten}</td>
+        <td>${fullOral}</td>
+        <td>${fm}</td>
+        <td>${obtainedWritten}</td>
+        <td>${obtainedOral}</td>
+        <td>${total}</td>
+        <td>${percentage.toFixed(2)}%</td>
+        <td>${grade}</td>
+      </tr>
+    `;
+
+    tbody.innerHTML += row;
+
   });
+
+  // ==========================================================
+  // GRAND TOTAL
+  // ==========================================================
 
   document.getElementById('grandFullMarks').innerText =
     student.FM || '';
@@ -355,32 +445,40 @@ function renderResult(student) {
 }
 
 // ============================================================
-// ORDINAL FORMAT  —  Bug সম্পূর্ণ ঠিক করা হয়েছে
-// পুরানো: value.replace() — "22" → "2<sup>nd</sup>2"  ❌
-// নতুন:   শেষ দুই সংখ্যা দিয়ে সঠিক suffix বের করা    ✅
-// 11th, 12th, 13th special case handle করা হয়েছে        ✅
+// ORDINAL FORMAT
 // ============================================================
 
 function formatOrdinal(value) {
 
   const n = parseInt(value, 10);
 
-  // যদি number না হয় (blank বা '-') তাহলে সরাসরি return
-  if (isNaN(n) || value === '' || value === '-') {
+  if (
+    isNaN(n) ||
+    value === '' ||
+    value === '-'
+  ) {
     return value;
   }
 
-  const lastTwo = n % 100;   // 11–13 special case এর জন্য
-  const lastOne = n % 10;    // 1, 2, 3 suffix এর জন্য
+  const lastTwo = n % 100;
+  const lastOne = n % 10;
 
-  // 11th, 12th, 13th — সবসময় "th" হবে
+  // 11th 12th 13th
   if (lastTwo >= 11 && lastTwo <= 13) {
     return n + '<sup>th</sup>';
   }
 
-  if (lastOne === 1) return n + '<sup>st</sup>';
-  if (lastOne === 2) return n + '<sup>nd</sup>';
-  if (lastOne === 3) return n + '<sup>rd</sup>';
+  if (lastOne === 1) {
+    return n + '<sup>st</sup>';
+  }
+
+  if (lastOne === 2) {
+    return n + '<sup>nd</sup>';
+  }
+
+  if (lastOne === 3) {
+    return n + '<sup>rd</sup>';
+  }
 
   return n + '<sup>th</sup>';
 
@@ -392,13 +490,19 @@ function formatOrdinal(value) {
 
 function downloadPDF() {
 
-  const element = document.getElementById('marksheet');
+  const element =
+    document.getElementById('marksheet');
+
+  const studentName =
+    document.getElementById('studentName')
+      .innerText || 'Student';
 
   const opt = {
 
     margin: 0,
 
-    filename: 'Result_' + (document.getElementById('studentName').innerText || 'Student') + '.pdf',
+    filename:
+      'Result_' + studentName + '.pdf',
 
     image: {
       type: 'jpeg',
