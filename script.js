@@ -4,7 +4,7 @@
 // ============================================================
 
 // ⚠️ Deploy করার পরে এখানে আপনার Deployment ID বসান
-const WEB_APP_URL =
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyOnxQqelRC93Xmx61AHsmX3XsB6u3qKK_LtY0miKigHQGwH2fz75Ho1hxy8YoYYsYWQQ/exec';
   'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
 
 let allStudents = [];
