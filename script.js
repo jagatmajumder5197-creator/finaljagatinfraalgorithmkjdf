@@ -16,7 +16,7 @@ let allStudents = [];
 const subjects = [
 
   {
-    name: 'Bengali',
+    name: 'BENGALI',
     fm: 'FMB',
     written: 'WTB',
     oral: 'OLB',
@@ -26,7 +26,7 @@ const subjects = [
   },
 
   {
-    name: 'English',
+    name: 'ENGLISH',
     fm: 'FME',
     written: 'WTE',
     oral: 'OLE',
@@ -35,28 +35,8 @@ const subjects = [
     grade: 'GDE'
   },
 
-   {
-    name: 'Beng Rhym',
-    fm: 'FMRYMB',
-    written: 'WTRYMB',
-    oral: 'OLRYMB',
-    total: 'TTRYMB',
-    percentage: 'PCRYMB',
-    grade: 'GDRYMB'
-  },
-
   {
-    name: 'Eng Rhym',
-    fm: 'FMRYME',
-    written: 'WTRYME',
-    oral: 'OLRYME',
-    total: 'TTRYME',
-    percentage: 'PCRYME',
-    grade: 'GDRYME'
-  },
-   
-  {
-    name: 'Math',
+    name: 'MATHS',
     fm: 'FMM',
     written: 'WTM',
     oral: 'OLM',
@@ -66,7 +46,7 @@ const subjects = [
   },
 
   {
-    name: 'Hindi',
+    name: 'HINDI',
     fm: 'FMHN',
     written: 'WTHN',
     oral: 'OLHN',
@@ -76,7 +56,7 @@ const subjects = [
   },
 
   {
-    name: 'Computer',
+    name: 'COMPUTER',
     fm: 'FMCM',
     written: 'WTCM',
     oral: 'OLCM',
@@ -125,9 +105,28 @@ const subjects = [
     grade: 'GDPSC'
   },
 
+  {
+    name: 'Beng Rhym',
+    fm: 'FMRYMB',
+    written: 'WTRYMB',
+    oral: 'OLRYMB',
+    total: 'TTRYMB',
+    percentage: 'PCRYMB',
+    grade: 'GDRYMB'
+  },
+
+  {
+    name: 'Eng Rhym',
+    fm: 'FMRYME',
+    written: 'WTRYME',
+    oral: 'OLRYME',
+    total: 'TTRYME',
+    percentage: 'PCRYME',
+    grade: 'GDRYME'
+  },
    
   {
-    name: 'History',
+    name: 'HSTORY',
     fm: 'FMHS',
     written: 'WTHS',
     oral: 'OLHS',
@@ -137,7 +136,7 @@ const subjects = [
   },
 
   {
-    name: 'Geography',
+    name: 'GEOGRAPHY',
     fm: 'FMG',
     written: 'WTG',
     oral: 'OLG',
