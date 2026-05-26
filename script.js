@@ -56,7 +56,7 @@ const subjects = [
   },
    
   {
-    name: 'Maths',
+    name: 'Math',
     fm: 'FMM',
     written: 'WTM',
     oral: 'OLM',
@@ -106,7 +106,7 @@ const subjects = [
   },
 
 {
-    name: 'LSc',
+    name: 'LSC',
     fm: 'FMLSC',
     written: 'WRLSC',
     oral: 'OLLSC',
@@ -116,7 +116,7 @@ const subjects = [
   },
 
   {
-    name: 'PSc',
+    name: 'PSC',
     fm: 'FMPSC',
     written: 'WTPSC',
     oral: 'OLPSC',
