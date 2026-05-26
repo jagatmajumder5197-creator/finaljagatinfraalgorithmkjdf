@@ -35,8 +35,28 @@ const subjects = [
     grade: 'GDE'
   },
 
+   {
+    name: 'Beng (Rhym)',
+    fm: 'FMRYMB',
+    written: 'WTRYMB',
+    oral: 'OLRYMB',
+    total: 'TTRYMB',
+    percentage: 'PCRYMB',
+    grade: 'GDRYMBB'
+  },
+
   {
-    name: 'Math',
+    name: 'Eng (Rhym)',
+    fm: 'FMRYME',
+    written: 'WTRYME',
+    oral: 'OLRYME',
+    total: 'TTRYME',
+    percentage: 'PCRYME',
+    grade: 'GDRYME'
+  },
+  
+  {
+    name: 'Maths',
     fm: 'FMM',
     written: 'WTM',
     oral: 'OLM',
@@ -85,6 +105,27 @@ const subjects = [
     grade: 'GDEV'
   },
 
+{
+    name: 'LSc',
+    fm: 'FMLSC',
+    written: 'WTLSC',
+    oral: 'OLLSC',
+    total: 'TTLSC',
+    percentage: 'PCLSC',
+    grade: 'GDLSC'
+  },
+
+  {
+    name: 'PSc',
+    fm: 'FMPSC',
+    written: 'WTPSC',
+    oral: 'OLPSC',
+    total: 'TTPSC',
+    percentage: 'PCPSC',
+    grade: 'GDPSC'
+  },
+
+  
   {
     name: 'History',
     fm: 'FMHS',
