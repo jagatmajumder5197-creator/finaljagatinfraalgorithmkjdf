@@ -417,7 +417,7 @@ function renderResult(student) {
 
     else if (fm === 50) {
 
-      if (obtainedWritten <= 0) {
+      if (obtainedWritten = N) {
 
         fullWritten = 0;
         fullOral    = 50;
