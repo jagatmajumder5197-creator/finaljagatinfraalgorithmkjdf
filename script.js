@@ -54,7 +54,7 @@ const subjects = [
     percentage: 'PCRYME',
     grade: 'GDRYME'
   },
-  
+   
   {
     name: 'Maths',
     fm: 'FMM',
@@ -125,7 +125,7 @@ const subjects = [
     grade: 'GDPSC'
   },
 
-  
+   
   {
     name: 'History',
     fm: 'FMHS',
