@@ -36,7 +36,7 @@ const subjects = [
   },
 
    {
-    name: 'Beng (Rhym)',
+    name: 'Beng Rhym',
     fm: 'FMRYMB',
     written: 'WTRYMB',
     oral: 'OLRYMB',
@@ -46,7 +46,7 @@ const subjects = [
   },
 
   {
-    name: 'Eng (Rhym)',
+    name: 'Eng Rhym',
     fm: 'FMRYME',
     written: 'WTRYME',
     oral: 'OLRYME',
@@ -405,29 +405,34 @@ function renderResult(student) {
     let fullOral    = 0;
 
     // ========================================================
-    // FM LOGIC
-    // ========================================================
+     // FM LOGIC
+      // =========================
 
-    if (fm === 100) {
-
-      fullWritten = 90;
-      fullOral    = 10;
-
-    }
-
-    else if (fm === 50) {
-
-      if (obtainedWritten = N) {
-
-        fullWritten = 0;
-        fullOral    = 50;
-
-      } else {
-
-        fullWritten = 45;
-        fullOral    = 5;
-
+      if(fm == 100){
+        // FM = 100 → Written: 90, Oral: 10
+        fullWritten = 90;
+        fullOral = 10;
       }
+      else if(fm == 25){
+        // FM = 25 → Written: hidden (0), Oral: 25
+        fullWritten = 0;
+        fullOral = 25;
+      }
+      else if(fm == 50){
+        // FM = 50 → Check if WT = "N"
+        // IF WT = "N" → Written: hidden, Oral: 50
+        // ELSE → Written: 45, Oral: 5
+
+        if(student[sub.written] === 'N' || student[sub.written] === 'n' || student[sub.written] === '' || student[sub.written] === null){
+          // No written exam
+          fullWritten = 0;  // Hide written
+          fullOral = 50;
+        }
+        else{
+          // Has written exam
+          fullWritten = 45;
+          fullOral = 5;
+        }
 
     }
 
