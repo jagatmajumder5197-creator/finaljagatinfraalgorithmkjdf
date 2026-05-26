@@ -42,7 +42,7 @@ const subjects = [
     oral: 'OLRYMB',
     total: 'TTRYMB',
     percentage: 'PCRYMB',
-    grade: 'GDRYMBB'
+    grade: 'GDRYMB'
   },
 
   {
@@ -108,7 +108,7 @@ const subjects = [
 {
     name: 'LSc',
     fm: 'FMLSC',
-    written: 'WTLSC',
+    written: 'WRLSC',
     oral: 'OLLSC',
     total: 'TTLSC',
     percentage: 'PCLSC',
